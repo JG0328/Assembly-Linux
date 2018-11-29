@@ -15,13 +15,13 @@ _start:
         call _printLet2
         call _obtenerCaracter
 
-        ;mov rsi, buffCaracter
-        ;mov rdi, [buffCadena]
         mov rcx,0
         mov rdx,0
         call _contar
         
-        ;call _printLet3
+        push rcx
+        call _printLet3
+        pop rcx
 
         mov rax,rcx
         call _printNum
@@ -31,13 +31,14 @@ _start:
         syscall
 
 _contar:
-        mov rdi,[buffCadena]
+        mov rdi,buffCadena
         mov al,[buffCaracter]
 
         contarLoop:
+                mov ah,[rdi]
                 cmp rdx,50
                 je contarEnd
-                cmp byte[rdi],al
+                cmp ah,al
                 je incCont
 
                 inc rdx
