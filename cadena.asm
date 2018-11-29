@@ -17,25 +17,39 @@ _start:
 
         ;mov rsi, buffCaracter
         ;mov rdi, [buffCadena]
+        mov rcx,0
+        mov rdx,0
         call _contar
         
-        call _printLet3
+        ;call _printLet3
 
         mov rax,rcx
-        ;call _printNum
+        call _printNum
 
         mov rax,60
         mov rdi,0
         syscall
 
 _contar:
-        mov rbx,buffCadena
-        mov rsi, [rbx]
-        mov rax,1
-        mov rdi,1
-        mov rdx,21
-        syscall
-        ret
+        mov rdi,[buffCadena]
+        mov al,[buffCaracter]
+
+        contarLoop:
+                cmp rdx,50
+                je contarEnd
+                cmp byte[rdi],al
+                je incCont
+
+                inc rdx
+                inc rdi
+                jmp contarLoop
+        incCont:
+                inc rcx
+                inc rdi
+                inc rdx
+                jmp contarLoop
+        contarEnd:
+                ret
 
 _printNum:
         mov rcx,digitSpace
