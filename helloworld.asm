@@ -7,8 +7,8 @@ _start:
         mov rdi,1
         mov rsi,text
         mov rdx,14
-        syscall
+        syscall       ;llamada al sistema
 
         mov rax,60
         mov rdi,0
-        syscall
+        syscall       ;llamada al sistema
