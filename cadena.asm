@@ -4,11 +4,12 @@ section .data
         let3 db "Se repite: ", 10
         let4 db "Ascendente: "
         let5 db "Descendete: "
-        let6 db "Es par"
-        let7 db "Es impar"
-        let8 db "Es primo"
-        let9 db "Es compuesto"
+        let6 db "Es par", 10
+        let7 db "Es impar", 10
+        let8 db "Es primo", 10
+        let9 db "Es compuesto", 10
         let10 db "Total de caracteres: "
+        let11 db "El 1 no es primo ni compuesto", 10
         newLine db "", 10
         ordAs db "ABCDEFGHIJKLMNOPQRSTUVWXYZ$"
         ordDes db "ZYXWVUTSRQPONMLKJIHGFEDCBA$"
@@ -27,7 +28,10 @@ _start:
         mov rcx,0
         mov rdx,0
         mov rdx,buffCadena
+        ;se imprime el total de caracteres que tiene la cadena
         call _obtenerTotalCaracteres
+        ;se determina si el numero es par o impar, primo o compuesto
+        call _determinarNumero
 
         call _printLet2
         call _obtenerCaracter
@@ -40,16 +44,143 @@ _start:
         call _printLet3
         pop rcx
 
+        ;se imprime las veces que se repite el caracter
         push rcx
         mov rax,rcx
         call _printNum
         pop rcx
 
+        ;se ordena la cadena de forma ascendente y descendente
         call _ordenar
 
         mov rax,60
         mov rdi,0
         syscall
+
+_determinarNumero:
+        xor rbx,rbx
+        mov rbx,rcx ;muevo el numero a rbx para no interferir con las operaciones
+        parImpar:
+                mov rdx,0
+                mov rax,rbx
+                mov rcx,2
+                div rcx ;rax contendra el cociente y rdx el residuo
+
+                cmp rdx,0
+                je esPar
+
+                jmp esImpar
+        esPar:
+                push rax
+                push rdi
+                push rsi
+                push rdx
+
+                mov rax,1
+                mov rdi,1
+                mov rsi,let6
+                mov rdx,7
+                syscall
+
+                pop rdx
+                pop rsi
+                pop rdi
+                pop rax
+
+                jmp primoCompuesto
+        esImpar:
+                push rax
+                push rdi
+                push rsi
+                push rdx
+
+                mov rax,1
+                mov rdi,1
+                mov rsi,let7
+                mov rdx,9
+                syscall
+
+                pop rdx
+                pop rsi
+                pop rdi
+                pop rax
+        primoCompuesto:
+                cmp rbx,1
+                je excUno
+                cmp rbx,2
+                je esPrimo
+
+                mov rsi,2
+                jmp pcLoop
+        pcLoop:
+                cmp rbx,rsi
+                je esPrimo
+
+                mov rdx,0
+                mov rax,rbx
+                mov rcx,rsi
+                div rcx ;rax contendra el cociente y rdx el residuo
+
+                cmp rdx,0
+                je esCompuesto
+
+                inc rsi
+
+                jmp pcLoop
+        excUno:
+                push rax
+                push rdi
+                push rsi
+                push rdx
+
+                mov rax,1
+                mov rdi,1
+                mov rsi,let11
+                mov rdx,30
+                syscall
+
+                pop rdx
+                pop rsi
+                pop rdi
+                pop rax
+
+                jmp endDet
+        esPrimo:
+                push rax
+                push rdi
+                push rsi
+                push rdx
+
+                mov rax,1
+                mov rdi,1
+                mov rsi,let8
+                mov rdx,9
+                syscall
+
+                pop rdx
+                pop rsi
+                pop rdi
+                pop rax
+
+                jmp endDet
+        esCompuesto:
+                push rax
+                push rdi
+                push rsi
+                push rdx
+
+                mov rax,1
+                mov rdi,1
+                mov rsi,let9
+                mov rdx,13
+                syscall
+
+                pop rdx
+                pop rsi
+                pop rdi
+                pop rax
+        endDet:
+                ret
 
 _obtenerTotalCaracteres:
         totalLoop:
@@ -66,8 +197,10 @@ _obtenerTotalCaracteres:
                 dec rcx
                 jmp printTotalChars
         printTotalChars:
+                push rcx
                 mov rax,rcx
                 call _printNum
+                pop rcx
                 ret
 _ordenar:
         call _printLet4
