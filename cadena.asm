@@ -4,6 +4,11 @@ section .data
         let3 db "Se repite: ", 10
         let4 db "Ascendente: "
         let5 db "Descendete: "
+        let6 db "Es par"
+        let7 db "Es impar"
+        let8 db "Es primo"
+        let9 db "Es compuesto"
+        let10 db "Total de caracteres: "
         newLine db "", 10
         ordAs db "ABCDEFGHIJKLMNOPQRSTUVWXYZ$"
         ordDes db "ZYXWVUTSRQPONMLKJIHGFEDCBA$"
@@ -16,7 +21,14 @@ section .text
         global _start
 _start:
         call _printLet1
-        call  _obtenerCadena
+        call _obtenerCadena
+
+        call _printLet10
+        mov rcx,0
+        mov rdx,0
+        mov rdx,buffCadena
+        call _obtenerTotalCaracteres
+
         call _printLet2
         call _obtenerCaracter
 
@@ -37,6 +49,24 @@ _start:
         mov rdi,0
         syscall
 
+_obtenerTotalCaracteres:
+        totalLoop:
+                mov ah,[rdx]
+                
+                inc rcx
+                inc rdx
+
+                cmp ah,10
+                je decRCX
+
+                jmp totalLoop
+        decRCX:
+                dec rcx
+                jmp printTotalChars
+        printTotalChars:
+                mov rax,rcx
+                call _printNum
+                ret
 _ordenar:
         call _printLet4
 
@@ -273,10 +303,39 @@ _printLet5:
         pop rax
 
         ret
+_printLet10:
+        push rax
+        push rdi
+        push rsi
+        push rdx
+
+        mov rax,1
+        mov rdi,1
+        mov rsi,let10
+        mov rdx,21
+        syscall
+
+        pop rdx
+        pop rsi
+        pop rdi
+        pop rax
+
+        ret
 _printNewLine:
+        push rax
+        push rdi
+        push rsi
+        push rdx
+
         mov rax,1
         mov rdi,1
         mov rsi,newLine
         mov rdx,1
         syscall
+        
+        pop rdx
+        pop rsi
+        pop rdi
+        pop rax
+
         ret
