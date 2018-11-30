@@ -2,6 +2,8 @@ section .data
         let1 db "Inserte una cadena: ", 10
         let2 db "Inserte el caracter a buscar: ", 10
         let3 db "Se repite: ", 10
+        let4 db "Ascendente: "
+        let5 db "Descendete: "
         newLine db "", 10
         ordAs db "ABCDEFGHIJKLMNOPQRSTUVWXYZ$"
         ordDes db "ZYXWVUTSRQPONMLKJIHGFEDCBA$"
@@ -36,6 +38,8 @@ _start:
         syscall
 
 _ordenar:
+        call _printLet4
+
         mov rdi,buffCadena
         mov rsi,ordAs
         mov rdx,0
@@ -67,6 +71,7 @@ _ordenar:
                 mov rdi,buffCadena
                 mov rsi,ordDes
                 mov rdx,0
+                call _printLet5
                 jmp desLoop
         ascPrintChar:
                 push rax
@@ -242,6 +247,31 @@ _printLet3:
         mov rsi,let3
         mov rdx,12
         syscall
+        ret
+_printLet4:
+        mov rax,1
+        mov rdi,1
+        mov rsi,let4
+        mov rdx,12
+        syscall
+        ret
+_printLet5:
+        push rax
+        push rdi
+        push rsi
+        push rdx
+
+        mov rax,1
+        mov rdi,1
+        mov rsi,let5
+        mov rdx,12
+        syscall
+
+        pop rdx
+        pop rsi
+        pop rdi
+        pop rax
+
         ret
 _printNewLine:
         mov rax,1
