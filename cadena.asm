@@ -51,13 +51,24 @@ _ordenar:
                 je ascEnd
 
                 cmp al,ah
-                je printChar
+                je ascPrintChar
 
                 inc rdi
                 inc rdx
 
                 jmp ascLoop
-        printChar:
+        ascReset:
+                mov rdx,0
+                mov rdi,buffCadena
+                inc rsi
+                jmp ascLoop
+        ascEnd:
+                call _printNewLine
+                mov rdi,buffCadena
+                mov rsi,ordDes
+                mov rdx,0
+                jmp desLoop
+        ascPrintChar:
                 push rax
                 push rdi
                 push rdx
@@ -82,12 +93,54 @@ _ordenar:
                 inc rdx
 
                 jmp ascLoop
-        ascReset:
+        desLoop:
+                cmp rdx,50
+                je desReset
+
+                mov ah,[rsi]
+                mov al,[rdi]
+
+                cmp ah,'$'
+                je sortEnd
+
+                cmp al,ah
+                je desPrintChar
+
+                inc rdi
+                inc rdx
+
+                jmp desLoop
+        desReset:
                 mov rdx,0
                 mov rdi,buffCadena
                 inc rsi
-                jmp ascLoop
-        ascEnd:
+                jmp desLoop
+        desPrintChar:
+                push rax
+                push rdi
+                push rdx
+                push rsi
+
+                mov rcx,rsi
+
+                mov rax,1
+                mov rdi,1
+                mov rsi,rcx
+                mov rdx,1
+                syscall
+
+                pop rsi
+                pop rdx
+                pop rdi
+                pop rax
+
+                jmp desRetry
+        desRetry:
+                inc rdi
+                inc rdx
+
+                jmp desLoop
+        sortEnd:
                 call _printNewLine
                 ret
 _contar:
