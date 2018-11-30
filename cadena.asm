@@ -40,8 +40,10 @@ _start:
         call _printLet3
         pop rcx
 
+        push rcx
         mov rax,rcx
         call _printNum
+        pop rcx
 
         call _ordenar
 
