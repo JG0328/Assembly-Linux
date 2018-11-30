@@ -2,8 +2,9 @@ section .data
         let1 db "Inserte una cadena: ", 10
         let2 db "Inserte el caracter a buscar: ", 10
         let3 db "Se repite: ", 10
-        ordAs db "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        ordDes db "ZYXWVUTSRQPONMLKJIHGFEDCBA"
+        newLine db "", 10
+        ordAs db "ABCDEFGHIJKLMNOPQRSTUVWXYZ$"
+        ordDes db "ZYXWVUTSRQPONMLKJIHGFEDCBA$"
 section .bss
         buffCadena resb 50
         buffCaracter resb 1
@@ -28,10 +29,63 @@ _start:
         mov rax,rcx
         call _printNum
 
+        call _printNewLine
+        call _ordenar
+
         mov rax,60
         mov rdi,0
         syscall
 
+_ordenar:
+        mov rdi,buffCadena
+        mov rsi,ordAs
+        mov rdx,0
+
+        ascLoop:
+                cmp rdx,50
+                je ascReset
+
+                mov ah,[rsi]
+                mov al,[rdi]
+
+                cmp ah,'$'
+                je ascEnd
+
+                cmp al,ah
+                je printChar
+
+                inc rdi
+                inc rdx
+
+                jmp ascLoop
+        printChar:
+                push rax
+                push rdi
+                push rdx
+                push rsi
+
+                mov rcx,rsi
+
+                mov rax,1
+                mov rdi,1
+                mov rsi,rcx
+                mov rdx,1
+                syscall
+
+                pop rsi
+                pop rdx
+                pop rdi
+                pop rax
+
+                jmp ascReset
+        ascReset:
+                mov rdx,0
+                mov rdi,buffCadena
+                inc rsi
+                jmp ascLoop
+        ascEnd:
+                call _printNewLine
+                ret
 _contar:
         mov rdi,buffCadena
         mov al,[buffCaracter]
@@ -130,5 +184,12 @@ _printLet3:
         mov rdi,1
         mov rsi,let3
         mov rdx,12
+        syscall
+        ret
+_printNewLine:
+        mov rax,1
+        mov rdi,1
+        mov rsi,newLine
+        mov rdx,1
         syscall
         ret
