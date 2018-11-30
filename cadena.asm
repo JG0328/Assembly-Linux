@@ -2,6 +2,8 @@ section .data
         let1 db "Inserte una cadena: ", 10
         let2 db "Inserte el caracter a buscar: ", 10
         let3 db "Se repite: ", 10
+        ordAs db "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        ordDes db "ZYXWVUTSRQPONMLKJIHGFEDCBA"
 section .bss
         buffCadena resb 50
         buffCaracter resb 1
@@ -76,21 +78,21 @@ _printNumLoop:
         jne _printNumLoop
 
 _printNumLoop2:
-    mov rcx,[digitSpacePos]
-    mov rax,1
-    mov rdi,1
-    mov rsi,rcx
-    mov rdx,1
-    syscall
+        mov rcx,[digitSpacePos]
+        mov rax,1
+        mov rdi,1
+        mov rsi,rcx
+        mov rdx,1
+        syscall
 
-    mov rcx,[digitSpacePos]
-    dec rcx
-    mov [digitSpacePos],rcx
+        mov rcx,[digitSpacePos]
+        dec rcx
+        mov [digitSpacePos],rcx
 
-    cmp rcx,digitSpace
-    jge _printNumLoop2
+        cmp rcx,digitSpace
+        jge _printNumLoop2
 
-    ret
+        ret
 _obtenerCadena:
         mov rax,0
         mov rdi,0
