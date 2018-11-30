@@ -1,6 +1,7 @@
 
 section .data
         let1 db "Inserte el nombre del archivo, con su extension: "
+        clear db "./clear", 0
 section .bss
         buffArchivo resb 50    ;nombre del archivo, con su extension
         buffLectura resb 20480 ;se permite la lectura de hasta 20KB
