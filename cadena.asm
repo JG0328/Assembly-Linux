@@ -29,7 +29,6 @@ _start:
         mov rax,rcx
         call _printNum
 
-        call _printNewLine
         call _ordenar
 
         mov rax,60
@@ -77,7 +76,12 @@ _ordenar:
                 pop rdi
                 pop rax
 
-                jmp ascReset
+                jmp ascRetry
+        ascRetry:
+                inc rdi
+                inc rdx
+
+                jmp ascLoop
         ascReset:
                 mov rdx,0
                 mov rdi,buffCadena
