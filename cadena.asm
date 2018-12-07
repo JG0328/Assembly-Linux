@@ -54,12 +54,13 @@ _start:
         ;se ordena la cadena de forma ascendente y descendente
         call _ordenar
 
+        ;se terminar el programa
         mov rax,60
         mov rdi,0
         syscall
 
 _determinarNumero:
-        xor rbx,rbx
+        xor rbx,rbx ;rbx se inicializa en cero
         mov rbx,rcx ;muevo el numero a rbx para no interferir con las operaciones
         parImpar:
                 mov rdx,0
@@ -315,8 +316,8 @@ _ordenar:
                 call _printNewLine
                 ret
 _contar:
-        mov rdi,buffCadena
-        mov al,[buffCaracter]
+        mov rdi,buffCadena    ;se mueve la cadena a rdi para luego acceder a ella caracter por caracter
+        mov al,[buffCaracter] ;se mueve a al el caracter
 
         contarLoop:
                 mov ah,[rdi]
@@ -457,6 +458,8 @@ _printLet10:
         pop rax
 
         ret
+
+;funcion que imprime un cambio de linea
 _printNewLine:
         push rax
         push rdi

@@ -59,7 +59,7 @@ _start:
         mov rdi,0
         syscall
             
-
+;esta funcion elimina el caracter de cambio de linea en la captura del nombre del archivo
 _deleteNewLine:
         mov rsi,buffArchivo
         mov rdi,0
